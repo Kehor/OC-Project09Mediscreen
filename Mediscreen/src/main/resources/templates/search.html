@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mediscreen</title>
+</head>
+<body>
+<div class="nav">
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/search}">search</a>
+</div>
+<div>
+    <form th:action="@{/search}" method="POST" >
+        <input type="text"  name="praticien" th:value="false" hidden /> <br/>
+        <input type="text"  th:placeholder=" Prenom" name="prenom" /> <br/>
+        <input type="text"  th:placeholder=' Nom' name="nom" /> <br/>
+        <button class="add" name="Submit" value="search" type="Submit" th:text="search"></button>
+    </form>
+</div>
+<div>
+    <table class="transactions">
+        <thead>
+        <tr>
+            <th>nom</th>
+            <th>prenom</th>
+            <th>dob</th>
+            <th>sex</th>
+            <th>address</th>
+            <th>phone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each ="patient : ${patient}">
+            <td th:text="${patient.prenom}"></td>
+            <td th:text="${patient.nom}"></td>
+            <td th:text="${patient.dob}"></td>
+            <td th:text="${patient.sex}"></td>
+            <td th:text="${patient.address}"></td>
+            <td th:text="${patient.phone}"></td>
+            <form th:action="@{/profile}" method="get">
+                <input type="number" name="patientid" th:value="${patient.id}" hidden>
+                <td><button type="Submit" th:text="edit"></button></td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
