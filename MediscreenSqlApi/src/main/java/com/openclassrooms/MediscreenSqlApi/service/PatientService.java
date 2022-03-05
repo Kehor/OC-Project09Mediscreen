@@ -3,12 +3,14 @@ package com.openclassrooms.MediscreenSqlApi.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.MediscreenSqlApi.entity.Patient;
+import com.openclassrooms.MediscreenSqlApi.entity.Test;
 import com.openclassrooms.MediscreenSqlApi.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -39,7 +41,7 @@ public class PatientService {
 
     public Patient saveJsonPatient(String jsonpatient){
         Patient patient = new Patient();
-        Patient newpatient= new Patient();
+        Patient newpatient;
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -47,7 +49,8 @@ public class PatientService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        newpatient = findOneByEmail(patient.getEmail());
+        newpatient = Optional.ofNullable(findOneByEmail(patient.getEmail())).orElse(new Patient());
+        if(!patient.getEmail().isEmpty())newpatient.setEmail(patient.getEmail());
         if(!patient.getPassword().isEmpty())newpatient.setPassword(patient.getPassword());
         if(!patient.getPrenom().isEmpty())newpatient.setPrenom(patient.getPrenom());
         if(!patient.getNom().isEmpty())newpatient.setNom(patient.getNom());
@@ -55,11 +58,10 @@ public class PatientService {
         if(!patient.getSex().isEmpty())newpatient.setSex(patient.getSex());
         if(!patient.getAddress().isEmpty())newpatient.setAddress(patient.getAddress());
         if(!patient.getPhone().isEmpty())newpatient.setPhone(patient.getPhone());
-        if(patient.getFamily() != null)newpatient.setFamily(patient.getFamily());
+        if(newpatient.getCreatedAt() == null)newpatient.setCreatedAt(new Date());
         newpatient = patientRepository.save(newpatient);
 
         return newpatient;
     }
-
 
 }

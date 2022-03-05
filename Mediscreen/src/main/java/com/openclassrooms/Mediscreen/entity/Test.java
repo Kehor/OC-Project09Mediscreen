@@ -29,4 +29,12 @@ public class Test {
     public void setRisk(String risk) {
         this.risk = risk;
     }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", risk='" + risk + '\'' +
+                '}';
+    }
 }

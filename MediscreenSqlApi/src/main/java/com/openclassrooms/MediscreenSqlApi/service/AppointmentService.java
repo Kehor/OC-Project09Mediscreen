@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -37,13 +40,20 @@ public class AppointmentService {
         return appointments;
     }
 
-    public Appointment save(Long id, Long patientid, Long praticienid, Date reservedAt){
+    public Appointment save(Long id, Long patientid, Long praticienid, String reservedAt){
         Optional<Patient> optionalpatient = patientService.findOneById(patientid);
         Optional<Praticien> optionalpraticien = praticienService.findOneById(praticienid);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd'T'HH:mm", Locale.FRANCE);
+        Date reservedAtdate = null;
+        try {
+            reservedAtdate = formatter.parse(reservedAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if(optionalpatient.isPresent() && optionalpraticien.isPresent()) {
             Long patient = optionalpatient.get().getId();
             Long praticien = optionalpraticien.get().getId();
-            Appointment appointment = new Appointment(id,Optional.of(patient).get(),Optional.of(praticien).get(),reservedAt,new Date());
+            Appointment appointment = new Appointment(id,Optional.of(patient).get(),Optional.of(praticien).get(),reservedAtdate,new Date());
             appointmentRepository.save(appointment);
             return appointment;
         }else {
@@ -53,7 +63,7 @@ public class AppointmentService {
     }
 
     public Boolean deleteByid(Long id, Long patientid, Long praticienid){
-        Optional<Appointment> optionalAppointment = Optional.ofNullable(appointmentRepository.findOneByPraticienIdAndPatientId(patientid, praticienid));
+        Optional<List<Appointment>> optionalAppointment = Optional.ofNullable(appointmentRepository.findAllByPraticienIdAndPatientId(patientid, praticienid));
         if(optionalAppointment.isPresent()) {
         appointmentRepository.deleteById(id);
         }else {

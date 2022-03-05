@@ -46,4 +46,6 @@ ALTER TABLE `appointment` ADD FOREIGN KEY (`praticien_id`) REFERENCES `praticien
 
 ALTER TABLE `patient` ADD FOREIGN KEY (`family`) REFERENCES `test` (`id`);
 
-INSERT INTO `test` (risk) VALUES ("TestNone"),("TestBorderline"),("TestInDanger"),("TestEarlyOnset");
+INSERT INTO `test` (risk) VALUES ("None"),("Borderline"),("InDanger"),("EarlyOnset");
+INSERT INTO `patient` (email,password,prenom,nom,dob,sex) VALUES ("patient@test.fr","$2a$10$hvrUOtFkhzn/8oa.7oNdt.3ObqRg9mxxpFhDCJ8oczeJlhIL2bHPm","patient","Test","2000-01-01 00:00:00","M");
+INSERT INTO `praticien` (email,password,prenom,nom,sex) VALUES ("praticien@test.fr","$2a$10$hvrUOtFkhzn/8oa.7oNdt.3ObqRg9mxxpFhDCJ8oczeJlhIL2bHPm","praticien","Test","M");

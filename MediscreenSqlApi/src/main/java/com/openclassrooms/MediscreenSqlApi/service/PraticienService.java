@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +26,7 @@ public class PraticienService {
         }
         return praticien;
     }
+
     public Optional<Praticien> findOneById(Long id) {
         Optional<Praticien> praticien = null;
         try {
@@ -32,5 +35,15 @@ public class PraticienService {
             throw e;
         }
         return praticien;
+    }
+
+    public List<Praticien> findAll() {
+        List<Praticien> praticiens = new ArrayList<Praticien>();
+        try {
+            praticiens = praticienRepository.findAll();
+        } catch (Exception e) {
+            throw e;
+        }
+        return praticiens;
     }
 }

@@ -21,8 +21,8 @@ public class Praticien {
 
     private Date createdAt;
 /*
-    @OneToMany( targetEntity=Appointment.class, mappedBy="praticient" )
-    private List<Appointment> appointments = new ArrayList<>();
+    @OneToMany( targetEntity=AppointmentDto.class, mappedBy="praticient" )
+    private List<AppointmentDto> appointments = new ArrayList<>();
 */
     public Praticien() {
     }

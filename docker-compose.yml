@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    ports:
+      - 3307:3306
+    volumes:
+      - database-volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_USER: mediscreen
+      MYSQL_PASSWORD: rootroot
+      MYSQL_DATABASE: mediscreen
+    networks:
+      - isolation-network
+  SqlApi:
+    build: ./MediscreenSqlApi
+    image: mediscreensqlapi
+    container_name: mediscreensqlapi
+    ports:
+      - 8081:8081
+    networks:
+      - isolation-network
+    depends_on:
+      database:
+        condition: service_started
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-volume:/data/db
+    networks:
+      - isolation-network
+  NoSqlApi:
+    build: ./MediscreenNoSqlApi
+    image: mediscreennosqlapi
+    container_name: mediscreennosqlapi
+    ports:
+      - 8082:8082
+    networks:
+      - isolation-network
+    depends_on:
+      mongodb:
+        condition: service_started
+  Mediscreen:
+    build: ./Mediscreen
+    image: mediscreen
+    ports:
+      - 80:8080
+    networks:
+      - isolation-network
+    depends_on:
+      SqlApi:
+        condition: service_started
+      NoSqlApi:
+        condition: service_started
+
+
+networks:
+  isolation-network:
+    driver: bridge
+
+volumes:
+    database-volume:
+    mongo-volume:

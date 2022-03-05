@@ -26,7 +26,12 @@ public class PatientService {
     @Autowired
     private NoSqlApiMicroservice noSqlApiMicroservice;
 
-    public Patient savePatient(String email, String password, String prenom, String nom, String dob, String sex, String adrress, String phone, Test family){
+    public Patient getpatientbyemail(String email){
+        Patient patient = sqlApiMicroservice.getpatientbyemail(email);
+        return patient;
+    }
+
+    public Patient savePatient(String email, String password, String prenom, String nom, String dob, String sex, String adrress, String phone){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
         ObjectMapper Obj = new ObjectMapper();
@@ -38,7 +43,7 @@ public class PatientService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Patient patient = new Patient((long) 0,email,encodedPassword,prenom,nom,dobdate,sex,adrress,phone,family,null);
+        Patient patient = new Patient((long) 0,email,encodedPassword,prenom,nom,dobdate,sex,adrress,phone,null,null);
         try {
             jsonpatient = Obj.writeValueAsString(patient);
 
@@ -59,12 +64,8 @@ public class PatientService {
         return notes;
     }
 
-    public void findTriggersInNotes(List<Notes> notesList) {
-        List<String> triggersList = new ArrayList<>();
-        for (Notes notes : notesList) {
-            for (String trigger : triggersList) {
-                boolean val = notes.getPractitionnerNotesRecommandation().contains(trigger);
-            }
-        }
+    public Test getTestDiabete(Long id){
+        Test test = sqlApiMicroservice.getTest(id);
+        return test;
     }
 }

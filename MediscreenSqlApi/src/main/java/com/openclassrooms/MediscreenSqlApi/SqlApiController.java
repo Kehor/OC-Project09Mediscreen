@@ -6,10 +6,7 @@ import com.openclassrooms.MediscreenSqlApi.entity.Patient;
 import com.openclassrooms.MediscreenSqlApi.entity.Praticien;
 import com.openclassrooms.MediscreenSqlApi.entity.Test;
 import com.openclassrooms.MediscreenSqlApi.repository.PatientRepository;
-import com.openclassrooms.MediscreenSqlApi.service.AppointmentService;
-import com.openclassrooms.MediscreenSqlApi.service.LoginService;
-import com.openclassrooms.MediscreenSqlApi.service.PatientService;
-import com.openclassrooms.MediscreenSqlApi.service.PraticienService;
+import com.openclassrooms.MediscreenSqlApi.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,8 @@ public class SqlApiController {
     private PraticienService praticienService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private TestService testService;
 
     private Logger logger = LoggerFactory.getLogger(SqlApiController.class);
 
@@ -92,9 +91,24 @@ public class SqlApiController {
         return ResponseEntity.ok(praticien);
     }
 
+    @PostMapping("/praticien/getbyemail")
+    public ResponseEntity getpraticienbyemail(@RequestParam(name="email", required=true) String email) {
+        logger.info("getpraticienbyemail : "+email);
+        Praticien praticien = praticienService.findOneByEmail(email);
+        return ResponseEntity.ok(praticien);
+    }
+
+    @PostMapping("/praticien/getall")
+    public ResponseEntity getAllPraticien() {
+        logger.info("getAllPraticien : ");
+        List<Praticien> praticiens = praticienService.findAll();
+        logger.info("getAllPraticien : "+praticiens);
+        return ResponseEntity.ok(praticiens);
+    }
+
     @PostMapping("/appointment/save")
-    public ResponseEntity saveappointment(@RequestParam(name="id", required=true) Long id, @RequestParam(name="praticienid", required=true) Long praticienid, @RequestParam(name="patientid", required=true) Long patientid, @RequestParam(name="reservedAt", required=true) Date reservedAt){
-        logger.info("saveappointment : "+patientid);
+    public ResponseEntity saveappointment(@RequestParam(name="id", required=true) Long id, @RequestParam(name="praticienid", required=true) Long praticienid, @RequestParam(name="patientid", required=true) Long patientid, @RequestParam(name="reservedAt", required=true) String reservedAt){
+        logger.info("saveappointment : "+patientid+" "+praticienid);
         Appointment appointment = appointmentService.save(id,patientid,praticienid,reservedAt);
         return ResponseEntity.ok(appointment);
     }
@@ -115,8 +129,15 @@ public class SqlApiController {
 
     @PostMapping("/appointment/delete")
     public ResponseEntity deleteByid(@RequestParam(name="id", required=true) Long id,@RequestParam(name="praticienid", required=true) Long praticienid, @RequestParam(name="patientid", required=true) Long patientid){
-        logger.info("findAllByPraticien : "+id);
+        logger.info("deleteByid : "+id);
         Boolean delete = appointmentService.deleteByid(id,praticienid,patientid);
         return ResponseEntity.ok(delete);
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity getTest(@RequestParam(name="id", required=true) Long id){
+        logger.info("test : "+id);
+        Test test = testService.gettest(id);
+        return ResponseEntity.ok(test);
     }
 }

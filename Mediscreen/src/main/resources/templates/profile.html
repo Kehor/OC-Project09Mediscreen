@@ -8,8 +8,10 @@
 <div class="nav">
     <a th:href="@{/}">Home</a>
     <a th:href="@{/search}">search</a>
+    <a th:href="@{/myprofile}">myprofile</a>
+    <a th:href="@{/logout}">logout</a>
 </div>
-<div>
+<div th:if="${patient}">
     <form th:object="${patient}" th:action="@{/editprofile}" method="post">
         <input type="text" name="email" th:value="*{email}" hidden>
         <label>prenom :</label>
@@ -29,7 +31,7 @@
         <input type="submit" value="Edit">
     </form>
 
-    <tbody>
+    <tbody th:if="${notesList}">
     <tr th:each ="notes : ${notesList}">
         <form th:action="@{/editnotes}" method="post">
             <label>practitionnerNotesRecommandation :</label>
@@ -44,6 +46,89 @@
         </form>
     </tr>
     </tbody>
+    <h3 th:if="${test}" th:text="'Probabilité de diabète :'+ ${test.risk}"></h3>
+
+    <table th:if="${appointments}">
+        <thead>
+        <tr>
+            <th>nom</th>
+            <th>prenom</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each ="appointment : ${appointments}">
+            <div th:object="${appointment}">
+                <td th:text="*{praticien.nom}"></td>
+                <td th:text="*{praticien.prenom}"></td>
+                <td th:text="*{reservedAt}"></td>
+                <form th:action="@{/appointment/delete}" method="POST">
+                    <input type="number" name="id" th:value="*{id}" hidden>
+                    <input type="number" name="patientid" th:value="*{patient.id}" hidden>
+                    <input type="number" name="praticienid" th:value="*{praticien.id}" hidden>
+                    <td><button type="Submit" th:text="Delete"></button></td>
+                </form>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div th:if="${praticien}">
+    <table>
+        <thead>
+        <tr>
+            <th>nom</th>
+            <th>prenom</th>
+            <th>sex</th>
+            <th>address</th>
+            <th>phone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${praticien}">
+            <td th:text="*{nom}"></td>
+            <td th:text="*{prenom}"></td>
+            <td th:text="*{sex}"></td>
+            <td th:text="*{address}"></td>
+            <td th:text="*{phone}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form th:if="${uid}" th:object="${praticien}" th:action="@{/appointment/save}" method="POST">
+        <input type="number" name="patientid" th:value="${uid}" hidden>
+        <input type="number" name="praticienid" th:value="*{id}" hidden>
+        <input type="datetime-local" th:min="${#dates.format(#dates.createNow(),'YYYY-MM-dd HH:mm')}" step="3600" name="reservedAt" required>
+        <button type="Submit" th:text="valider"></button>
+    </form>
+
+    <table th:if="${appointments}">
+        <h2>Appointment</h2>
+        <br>
+        <thead>
+        <tr>
+            <th>nom</th>
+            <th>prenom</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each ="appointment : ${appointments}">
+            <div th:object="${appointment}">
+                <td th:text="*{praticien.nom}"></td>
+                <td th:text="*{praticien.prenom}"></td>
+                <td th:text="*{reservedAt}"></td>
+                <form th:action="@{/appointment/delete}" method="POST">
+                    <input type="number" name="id" th:value="*{id}" hidden>
+                    <input type="number" name="patientid" th:value="*{patient.id}" hidden>
+                    <input type="number" name="praticienid" th:value="*{praticien.id}" hidden>
+                    <td><button type="Submit" th:text="Delete"></button></td>
+                </form>
+            </div>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

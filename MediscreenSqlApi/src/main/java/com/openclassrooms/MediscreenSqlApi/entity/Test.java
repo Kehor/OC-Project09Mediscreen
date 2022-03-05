@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="praticient")
+@Table(name="test")
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +14,7 @@ public class Test {
     @Column(name="risk")
     private String risk;
 
-    public Test(Long id) {
-        this.id = id;
+    public Test() {
     }
 
     public Test(Long id, String risk) {

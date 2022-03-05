@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Mediscreen</title>
+</head>
+<body>
+<div class="middle">
+    <form th:action="@{/register}" method="POST" style="width:30%;margin:auto">
+        <div><a class="navTitle" th:href="@{/}">Mediscreen</a></div>
+
+        <input type="text" name="email" th:placeholder=" Email"required> <br/>
+        <input type="password"  th:placeholder=' Password' name="pass" required> <br/>
+        <input type="text"  th:placeholder=' Prenom' name="prenom" required> <br/>
+        <input type="text"  th:placeholder=' Nom' name="nom" required> <br/>
+        <input type="date" name="dob" required>
+        <select name="sex">
+            <option value="M">M</option>
+            <option value="F">Mme</option>
+        </select>
+        <input type="text"  th:placeholder=' Address' name="address"> <br/>
+        <input type="text"  th:placeholder=' Phone' name="phone"> <br/>
+
+        <a th:href="@{/login}">Deja un compte?</a>
+        <button name="Submit" type="Submit" th:text="Register"></button>
+    </form>
+</div>
+</body>
+</html>

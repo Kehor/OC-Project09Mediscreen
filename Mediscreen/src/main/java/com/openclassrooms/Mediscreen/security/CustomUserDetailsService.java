@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         String userEmail = "";
         String userPassword = "";
-        boolean isPraticient = false;
+        List<GrantedAuthority> authorities;
         if (email.trim().isEmpty()) {
             throw new UsernameNotFoundException("username is empty");
         }
@@ -40,19 +40,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (login.getPatient().isPresent()) {
             userEmail = login.getPatient().get().getEmail();
             userPassword = login.getPatient().get().getPassword();
+            authorities = getGrantedAuthorities("Patient");
         }else if (login.getPraticien().isPresent()) {
             userEmail = login.getPraticien().get().getEmail();
             userPassword = login.getPraticien().get().getPassword();
-            isPraticient = true;
+            authorities = getGrantedAuthorities("Praticien");
         }else {
             throw new UsernameNotFoundException("User " + email + " not found");
         }
-        return new org.springframework.security.core.userdetails.User(userEmail, userPassword, getGrantedAuthorities());
+        return new org.springframework.security.core.userdetails.User(userEmail, userPassword, authorities);
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities() {
+    private List<GrantedAuthority> getGrantedAuthorities(String role) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority(role));
         return authorities;
     }
 

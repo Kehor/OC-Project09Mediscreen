@@ -66,4 +66,15 @@ public class Notes {
     public void setPractitionnerNotesRecommandation(String practitionnerNotesRecommandation) {
         this.practitionnerNotesRecommandation = practitionnerNotesRecommandation;
     }
+
+    @Override
+    public String toString() {
+        return "Notes{" +
+                "id=" + id +
+                ", patientId=" + patientId +
+                ", createdAt=" + createdAt +
+                ", modifiedAt=" + modifiedAt +
+                ", practitionnerNotesRecommandation='" + practitionnerNotesRecommandation + '\'' +
+                '}';
+    }
 }

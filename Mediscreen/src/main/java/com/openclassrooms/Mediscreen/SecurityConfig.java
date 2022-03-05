@@ -39,17 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().tokenRepository(this.persistentTokenRepository())
                 .tokenValiditySeconds(1 * 24 * 60 * 60); // 24h
     }
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("springuser").password(bCryptPasswordEncoder().encode("test"))
-                .roles("USER");
-    }
-    /*
+
     @Override
     protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
         authManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }*/
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
